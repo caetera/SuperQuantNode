@@ -321,7 +321,6 @@ If not set the isolation window saved in MS spectrum is used",
                                     || x.Position > range[lowIndex + 1] - spectrum.PeakCentroids[end].Position + 2 * Proton) - start;
                         }
 
-                        //Console.WriteLine("start: {0}, k: {1}, end: {2}", start, k, end);
                         if (start + k >= end || k < 0) break; // no such peak
 
                         mass = spectrum.PeakCentroids[start + k].Position + spectrum.PeakCentroids[end].Position - 2 * Proton;
@@ -332,8 +331,6 @@ If not set the isolation window saved in MS spectrum is used",
                     end--; // make initial mass smaller, hiher masses were checked earlier
                 }
             }
-
-            //Log.DebugFormat("Annotation: Scan {0}; {1} peaks; {2} possible masses", spectrum.Header.ScanNumbers[0], spectrum.PeakCentroids.Count, masses.Count);
 
             return masses.getAll();
         }
@@ -367,8 +364,6 @@ If not set the isolation window saved in MS spectrum is used",
 
             outSpectra.Add(spectrum.Clone()); //clone initial spectrum to position 0; all unassigned peaks will be here
 
-            //Log.DebugFormat("Extraction: Scan {0}; {1} valid mass(es)", spectrum.Header.ScanNumbers[0], validIDs.Count);
-
             if (validIDs.Count > 0) //if at least one valid spectrum was found
             {
                 for (int i = 0; i < validIDs.Count; i++)//add one clone for each additional spectrum
@@ -382,7 +377,6 @@ If not set the isolation window saved in MS spectrum is used",
                     additionalSpectrum.Precursor.SinglyChargedMass = new MassValue(parentMasses[validIDs[i]].Position + Proton);
                     additionalSpectrum.Precursor.MeasuredMonoisotopicPeakCentroids[0].Position = (parentMasses[validIDs[i]].Position //calculate m/z
                         + parentMasses[validIDs[i]].Charge * Proton) / parentMasses[validIDs[i]].Charge;
-                    //?correct scan number?
                     outSpectra.Add(additionalSpectrum);
                 }
 
@@ -400,8 +394,6 @@ If not set the isolation window saved in MS spectrum is used",
                         }
                     }
                 }
-
-                //Log.DebugFormat("Extraction: Subspectrum 0 - {0} peaks", outSpectra[0].PeakCentroids.Count);
 
                 for (int i = 1; i < outSpectra.Count; i++) //add unassigned peaks to each spectrum
                 {
@@ -617,8 +609,6 @@ If not set the isolation window saved in MS spectrum is used",
         private void toSend (MassSpectrumCollection inspectra)
         /* Check if results can still fit in buffer and add them, otherwise send buffer and flush it */
         {
-            //Log.DebugFormat("toSend received {0} spectra", inspectra.Count);
-
             ProcessingServices.SpectrumProcessingService.InitializeSpectra(this, inspectra);
             if (inspectra.Count + spectrumBuffer.Count > PackageSize)
             {
