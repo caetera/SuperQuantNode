@@ -63,7 +63,6 @@ Kryuchkov et al. J. Proteome Res., 2013, 12(7), 3362–3371; DOI: 10.1021/pr4002
 
         private int spectra_in = 0;
         private int spectra_out = 0;
-        private int magic = 0;
 
         [IntSelectionParameter(
             Category = "1. Spectrum extraction",
@@ -155,31 +154,6 @@ If not set the isolation window saved in MS spectrum is used",
         public SimpleSelectionParameter<string> returnSelection;
 
         [BooleanParameter(
-            Category = "4. Secondary spectra mass verification",
-            DisplayName = "Enable MS1 verification",
-            Description = "If enabled checks if the predicted mass peak for secondary spectra is present in parent MS1 spectrum and removes spectra that don't meet this criteria",
-            DefaultValue = "False",
-            ValueRequired = true,
-            IsAdvanced = true,
-            Position = 1)]
-
-        public BooleanParameter verifyMS1;
-
-        [MassToleranceParameter(
-            Category = "4. Secondary spectra mass verification",
-            DisplayName = "Mass tolerance",
-            Description = "Mass tolerance used for MS1 verification",
-            MinimumValue = "0.0 mmu| 0.0 ppm",
-            MaximumValue = "100.0 mmu| 100.0 ppm",
-            DefaultValue = "5.0 ppm",
-            Subset = "mmu|ppm",
-            ValueRequired = true,
-            IsAdvanced = true,
-            Position = 2)]
-
-        public MassToleranceParameter VerifyPPM;
-
-        [BooleanParameter(
             Category = "2. Peak intensification",
             DisplayName = "Enable intensification",
             Description = "Set true if peak intensification is necessary",
@@ -221,6 +195,31 @@ If not set the isolation window saved in MS spectrum is used",
             Position = 2)]
 
         public MassToleranceParameter ignoreListPPM;
+
+        [BooleanParameter(
+            Category = "4. Secondary spectra mass verification",
+            DisplayName = "Enable MS1 verification",
+            Description = "If enabled checks if the predicted mass peak for secondary spectra is present in parent MS1 spectrum and removes spectra that don't meet this criteria",
+            DefaultValue = "False",
+            ValueRequired = true,
+            IsAdvanced = true,
+            Position = 1)]
+
+        public BooleanParameter verifyMS1;
+
+        [MassToleranceParameter(
+            Category = "4. Secondary spectra mass verification",
+            DisplayName = "Mass tolerance",
+            Description = "Mass tolerance used for MS1 verification",
+            MinimumValue = "0.0 mmu| 0.0 ppm",
+            MaximumValue = "100.0 mmu| 100.0 ppm",
+            DefaultValue = "5.0 ppm",
+            Subset = "mmu|ppm",
+            ValueRequired = true,
+            IsAdvanced = true,
+            Position = 2)]
+
+        public MassToleranceParameter VerifyPPM;
 
         private MassCentroid validIntensify(MassCentroid peak, double maxIntensity)
         /* Change intensity of peak according to rank */
@@ -397,7 +396,6 @@ If not set the isolation window saved in MS spectrum is used",
 
                 for (int i = 1; i < outSpectra.Count; i++) //add unassigned peaks to each spectrum
                 {
-                    //Log.DebugFormat("Extraction: Subspectrum {0} - {1} peaks", i, outSpectra[i].PeakCentroids.Count);
                     outSpectra[i].PeakCentroids.AddRange(outSpectra[0].PeakCentroids.AsEnumerable<MassCentroid>());
                     outSpectra[i].PeakCentroids.Sort();
                 }
@@ -527,12 +525,6 @@ If not set the isolation window saved in MS spectrum is used",
                 {
                     SendAndLogErrorMessage("The window for possible parent masses is empty! Please, check the settings of allowed coisolation window", true);
                     throw new Exception("Allowed coisolation window is empty");
-                }
-
-                //for debugging purposes
-                if (spectrum.Header.ScanNumbers[0] == magic)
-                {
-                    Log.DebugFormat("Magic!");
                 }
 
                 MassCentroidCollection excludedPeaks = applyExclusionList(spectrum); //apply exclusion list and put all excluded peaks in separate collection
