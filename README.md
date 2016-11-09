@@ -3,7 +3,7 @@
 Complementary Finder and MSn deconvolution processing nodes for Thermo Proteome Discoverer 2.x.
 
 ##Compatability
-The node is expected to be compatible with all versions of Proteome Discoverer startting from 2.0 and higher. It was tested on Proteome Discoverer 2.0.0.802 and 2.1.0.81. Earlier versions of Proteome Discoverer (for example 1.4) are not compatible with the node.
+The node is expected to be compatible with all versions of Proteome Discoverer startting from 2.0 and higher. It was tested on Proteome Discoverer 2.0.0.802, 2.1.0.81, and 2.1.1.21. Earlier versions of Proteome Discoverer (for example 1.4) are not compatible with the node.
 
 ##Installation
 Use **Download ZIP** button on the main page to download all necessary files (download of individual DLL might be blocked by the security policy) and follow the instructions in Installation.pdf
